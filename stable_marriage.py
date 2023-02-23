@@ -124,3 +124,24 @@ if __name__ == "__main__":
 
     stable_match = gale_shapley(a, b, preferences)
     print(stable_match)
+
+    ########################################################
+
+    a = {"a0", "a1", "a2", "a3"}
+    b = {"b0", "b1", "b2", "b3"}
+
+    preferences = {
+        "a0": ["b0", "b1", "b2", "b3"],  # a0: b3 > b2 > b1 > b0
+        "a1": ["b2", "b0", "b1", "b3"],  # a1: b3 > b1 > b0 > b2
+        "a2": ["b0", "b3", "b2", "b1"],  # a2: b1 > b2 > b3 > b0
+        "a3": ["b2", "b1", "b0", "b3"],  # a3: b3 > b0 > b1 > b2
+
+
+        "b0": ["a3", "a2", "a0", "a1"],  # b0: a1 > a0 > a2 > a3
+        "b1": ["a1", "a0", "a2", "a3"],  # b1: a3 > a2 > a0 > a1
+        "b2": ["a2", "a3", "a1", "a0"],  # b2: a0 > a1 > a3 > a2
+        "b3": ["a2", "a0", "a1", "a3"],  # b3: a3 > a1 > a0 > a2
+    }
+
+    stable_match = gale_shapley(a, b, preferences)
+    print(stable_match)
