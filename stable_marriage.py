@@ -5,7 +5,7 @@ https://en.wikipedia.org/wiki/Stable_marriage_problem
 Gale-Shapley algorithm
 https://en.wikipedia.org/wiki/Gale-Shapley_algorithm
 
-LeetCode 1583. Count Unhappy Friends
+Related: LeetCode 1583. Count Unhappy Friends
 https://leetcode.com/problems/count-unhappy-friends/
 """
 
