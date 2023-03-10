@@ -10,141 +10,164 @@ https://leetcode.com/problems/count-unhappy-friends/
 """
 
 
-def gale_shapley(a, b, preferences):
-    """
-    Let A and B be two disjoint sets of cardinality n each
-    ( A intersection B = empty set, |A| = |B| = n ).
+def gale_shapley(n, apref, ranking):
+    free = Node.range(n)
+    nxt = [0 for _ in range(n)]
+    current = [None for _ in range(n)]
 
-    A perfect matching between A and B is a pairing of the
-    elements of A with the elements of B.
-    That is, M, subset of { {a, b} | a in A, b in B }, is a
-    perfect matching iff for every a in A there exists exactly
-    one b in B such that {a, b} is in M (and viceversa).
-
-    Suppose that each a in A has a sorted preference over B,
-    and that each b in B has a sorted preference list over A.
-
-    Two distinct pairs {a, b}, {a', b'} in M exhibit an instability if
-    - a prefers b' to b, and
-    - b' prefers a to a'.
-
-    M is a stable matching if it contains no instabilities.
-
-    If I give you all the preference lists,
-    1. does there exist a stable matching?
-    2. how to find it, if it exists?
-
-    With the Gale-Shapley algorithm,
-    it is possible to prove 1. and do 2.
-
-    This function implements Gale-Shapley algorithm.
-
-    a: set of strings such that itself and b are disjoint
-    b: set of strings such that itself and a are disjoint
-
-    preferences: dictionary mapping elements of a and b to their sorted preference list
-                 (the higher their index, the higher the preference)
-
-    returns: dictionary mapping each element of a to an element of b
-
-    e.g.
-    a = {"a1", "a2"}
-    b = {"b1", "b2"}
-
-    preferences = {
-        "a1": ["b2", "b1"], # a1: b1 > b2
-        "a2": ["b2", "b1"], # a2: b1 > b2
-
-        "b1": ["a2", "a1"], # b1: a1 > a2
-        "b2": ["a2", "a1"] # b2: a1 > a2
-    }
-    """
-    pairs_a_to_b = {}
-    pairs_b_to_a = {}
-
-    # while there is some free a in A that hasn't yet proposed to each b in B
-    while a:
-        # let a_i be a free element of A
-        a_i = a.pop()
-        # let best_b be the element of B' that ranks highest in a_i's preference list
-        best_b = preferences[a_i].pop()
-        # if b is free
-        if best_b in b:
-            # match a_i and best_b
-            pairs_a_to_b[a_i] = best_b
-            pairs_b_to_a[best_b] = a_i
-            # a_i and best_b are not free anymore
-            b.remove(best_b)
+    while free:
+        a_i = free.value
+        b_j = apref[a_i][nxt[a_i]]
+        nxt[a_i] += 1
+        if current[b_j] is None:
+            current[b_j] = a_i
+            free = free.nxt
         else:
-            current = pairs_b_to_a[best_b]
-            if preferences[best_b].index(a_i) > preferences[best_b].index(current):
-                # match a_i and best_b
-                pairs_a_to_b[a_i] = best_b
-                pairs_b_to_a[best_b] = a_i
-                # "break up" {best_b, current}
-                del pairs_a_to_b[current]
-                a.add(current)
-            else:
-                # a_i remains free, and best_b remains engaged with her current partner
-                a.add(a_i)
+            a_k = current[b_j]
+            if ranking[b_j][a_i] < ranking[b_j][a_k]:
+                current[b_j] = a_i
+                free.value = a_k
 
-    return pairs_a_to_b
+    return current
+
+
+class Node:
+    def __init__(self, value, prev, nxt):
+        self.value = value
+        self.prev = prev
+        self.nxt = nxt
+
+    def range(n):
+        head = tail = Node(0, prev=None, nxt=None)
+        for _ in range(n - 1):
+            tail.nxt = Node(tail.value + 1, prev=tail, nxt=None)
+            tail = tail.nxt
+        return head
 
 
 if __name__ == "__main__":
-    a = {"a0", "a1"}
-    b = {"b0", "b1"}
+    n = 2
 
-    preferences = {
-        "a0": ["b1", "b0"],  # a0: b0 > b1
-        "a1": ["b1", "b1"],  # a1: b0 > b1
+    apref = [[None for _ in range(n)] for _ in range(n)]
 
-        "b0": ["a1", "a0"],  # b0: a0 > a1
-        "b1": ["a1", "a0"],  # b1: a0 > a1
-    }
+    # a0: b0 > b1
+    apref[0][0] = 0
+    apref[0][1] = 1
 
-    stable_match = gale_shapley(a, b, preferences)
-    assert stable_match == {"a0": "b0", "a1": "b1"}
-    print(stable_match)
+    # a1: b0 > b1
+    apref[1][0] = 0
+    apref[1][1] = 1
 
-    ########################################################
+    ranking = [[None for _ in range(n)] for _ in range(n)]
 
-    a = {"a0", "a1", "a2"}
-    b = {"b0", "b1", "b2"}
+    # b0: a0 > a1
+    ranking[0][0] = 0
+    ranking[0][1] = 1
 
-    preferences = {
-        "a0": ["b2", "b1", "b0"],  # a0: b0 > b1 > b2
-        "a1": ["b2", "b1", "b0"],  # a1: b0 > b1 > b2
-        "a2": ["b1", "b0", "b2"],  # a2: b2 > b0 > b1
+    # b1: a0 > a1
+    ranking[1][0] = 0
+    ranking[1][1] = 1
 
-
-        "b0": ["a1", "a0", "a2"],  # b0: a2 > a0 > a1
-        "b1": ["a1", "a0", "a2"],  # b1: a2 > a0 > a1
-        "b2": ["a1", "a0", "a2"],  # b2: a2 > a0 > a1
-    }
-
-    stable_match = gale_shapley(a, b, preferences)
-    assert stable_match == {'a0': 'b0', 'a2': 'b2', 'a1': 'b1'}
-    print(stable_match)
+    stable_match = gale_shapley(n, apref, ranking)
+    assert stable_match == [0, 1]
+    print({f"b{i}": f"a{stable_match[i]}" for i in range(n)})
 
     ########################################################
+    n = 3
 
-    a = {"a0", "a1", "a2", "a3"}
-    b = {"b0", "b1", "b2", "b3"}
+    apref = [[None for _ in range(n)] for _ in range(n)]
 
-    preferences = {
-        "a0": ["b0", "b1", "b2", "b3"],  # a0: b3 > b2 > b1 > b0
-        "a1": ["b2", "b0", "b1", "b3"],  # a1: b3 > b1 > b0 > b2
-        "a2": ["b0", "b3", "b2", "b1"],  # a2: b1 > b2 > b3 > b0
-        "a3": ["b2", "b1", "b0", "b3"],  # a3: b3 > b0 > b1 > b2
+    # a0: b0 > b1 > b2
+    apref[0][0] = 0
+    apref[0][1] = 1
+    apref[0][2] = 2
 
+    # a1: b0 > b1 > b2
+    apref[1][0] = 0
+    apref[1][1] = 1
+    apref[1][2] = 2
 
-        "b0": ["a3", "a2", "a0", "a1"],  # b0: a1 > a0 > a2 > a3
-        "b1": ["a1", "a0", "a2", "a3"],  # b1: a3 > a2 > a0 > a1
-        "b2": ["a2", "a3", "a1", "a0"],  # b2: a0 > a1 > a3 > a2
-        "b3": ["a2", "a0", "a1", "a3"],  # b3: a3 > a1 > a0 > a2
-    }
+    # a2: b2 > b0 > b1
+    apref[2][0] = 2
+    apref[2][1] = 0
+    apref[2][2] = 1
 
-    stable_match = gale_shapley(a, b, preferences)
-    assert stable_match == {'a2': 'b1', 'a3': 'b3', 'a0': 'b2', 'a1': 'b0'}
-    print(stable_match)
+    ranking = [[None for _ in range(n)] for _ in range(n)]
+
+    # b0: a2 > a0 > a1
+    ranking[0][2] = 0
+    ranking[0][0] = 1
+    ranking[0][1] = 2
+
+    # b1: a2 > a0 > a1
+    ranking[1][2] = 0
+    ranking[1][0] = 1
+    ranking[1][1] = 2
+
+    # b2: a2 > a0 > a1
+    ranking[2][2] = 0
+    ranking[2][0] = 1
+    ranking[2][1] = 2
+
+    stable_match = gale_shapley(n, apref, ranking)
+    assert stable_match == [0, 1, 2]
+    print({f"b{i}": f"a{stable_match[i]}" for i in range(n)})
+
+    ########################################################
+    n = 4
+
+    apref = [[None for _ in range(n)] for _ in range(n)]
+
+    # a0: b3 > b2 > b1 > b0
+    apref[0][0] = 3
+    apref[0][1] = 2
+    apref[0][2] = 1
+    apref[0][3] = 0
+
+    # a1: b3 > b1 > b0 > b2
+    apref[1][0] = 3
+    apref[1][1] = 1
+    apref[1][2] = 0
+    apref[1][3] = 2
+
+    # a2: b1 > b2 > b3 > b0
+    apref[2][0] = 1
+    apref[2][1] = 2
+    apref[2][2] = 3
+    apref[2][3] = 0
+
+    # a3: b3 > b0 > b1 > b2
+    apref[3][0] = 3
+    apref[3][1] = 0
+    apref[3][2] = 1
+    apref[3][3] = 2
+
+    ranking = [[None for _ in range(n)] for _ in range(n)]
+
+    # b0: a1 > a0 > a2 > a3
+    ranking[0][1] = 0
+    ranking[0][0] = 1
+    ranking[0][2] = 2
+    ranking[0][3] = 3
+
+    # b1: a3 > a2 > a0 > a1
+    ranking[1][3] = 0
+    ranking[1][2] = 1
+    ranking[1][0] = 2
+    ranking[1][1] = 3
+
+    # b2: a0 > a1 > a3 > a2
+    ranking[2][0] = 0
+    ranking[2][1] = 1
+    ranking[2][3] = 2
+    ranking[2][2] = 3
+
+    # b3: a3 > a1 > a0 > a2
+    ranking[3][3] = 0
+    ranking[3][1] = 1
+    ranking[3][0] = 2
+    ranking[3][2] = 3
+
+    stable_match = gale_shapley(n, apref, ranking)
+    assert stable_match == [1, 2, 0, 3]
+    print({f"b{i}": f"a{stable_match[i]}" for i in range(n)})
