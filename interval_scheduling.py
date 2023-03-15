@@ -24,7 +24,7 @@ def edf(tasks):
     """
     arguments:
         tasks: list of tasks
-            e.g. [(s0, t0), (s0, t0), (s1, t1)]
+            e.g. [(s0, f0), (s0, f0), (s1, f1)]
 
     returns:
         s: biggest set of non-overlapping tasks
