@@ -50,7 +50,7 @@ if __name__ == "__main__":
     tasks = [(0, 14), (0, 14), (10, 20), (16, 18)]
     biggest_schedule_set = edf(tasks)
     assert biggest_schedule_set == {(0, 14), (16, 18)}
-    print(edf(tasks))
+    print(biggest_schedule_set)
 
     ########################################################
 
@@ -60,7 +60,7 @@ if __name__ == "__main__":
     tasks = [(0, 40), (5, 12), (15, 17), (19, 25), (35, 38)]
     biggest_schedule_set = edf(tasks)
     assert biggest_schedule_set == {(5, 12), (15, 17), (19, 25), (35, 38)}
-    print(edf(tasks))
+    print(biggest_schedule_set)
 
     ########################################################
 
@@ -70,7 +70,7 @@ if __name__ == "__main__":
     tasks = [(0, 14), (16, 20), (10, 18)]
     biggest_schedule_set = edf(tasks)
     assert biggest_schedule_set == {(0, 14), (16, 20)}
-    print(edf(tasks))
+    print(biggest_schedule_set)
 
     ########################################################
 
@@ -87,4 +87,4 @@ if __name__ == "__main__":
     ]
     biggest_schedule_set = edf(tasks)
     assert biggest_schedule_set == {(0, 10), (20, 40), (45, 60), (65, 75)}
-    print(edf(tasks))
+    print(biggest_schedule_set)
