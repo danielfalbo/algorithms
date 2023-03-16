@@ -16,18 +16,18 @@ def partition(tasks):
                 e.g. [(s0, f0), (s0, f0), (s1, f1)]
 
     returns:
-        resources: partitioning list l such that
-                    l[i] == n means ith task is assigned to nth resource
+        resources: list such that
+                    resources[i] == n means ith task is assigned to nth resource
                     (tasks indices relative to list sorted by starting time increasingly,
                     resources indices starting at 1)
     """
     resources = [None for _ in range(len(tasks))]
-    new_resource = 1
+    next_resource = 1
 
     tasks.sort(key=lambda task: task[0])
 
     for j in range(len(tasks)):
-        l = set(range(1, new_resource + 1))
+        l = set(range(1, next_resource + 1))
 
         for i in range(j):
             assert tasks[j][0] >= tasks[i][0]
@@ -38,8 +38,8 @@ def partition(tasks):
         assert len(l) >= 1
         resources[j] = l.pop()
 
-        if resources[j] == new_resource:
-            new_resource += 1
+        if resources[j] == next_resource:
+            next_resource += 1
 
     return resources
 
