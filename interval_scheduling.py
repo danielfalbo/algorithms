@@ -7,16 +7,6 @@ https://en.wikipedia.org/wiki/Greedy_algorithm
 
 Earliest Deadline First (EDF) scheduling
 https://en.wikipedia.org/wiki/Earliest_deadline_first_scheduling
-
-Related:
-        LeetCode 621. Task Scheduler
-        https://leetcode.com/problems/task-scheduler/
-
-        LeetCode 646. Maximum Length of Pair Chain
-        https://leetcode.com/problems/maximum-length-of-pair-chain/description/
-
-        LeetCode 1520. Maximum Number of Non-Overlapping Substrings
-        https://leetcode.com/problems/maximum-number-of-non-overlapping-substrings/description/
 """
 
 
