@@ -22,11 +22,16 @@ class Heap:
         self.__nodes_count = 0
         self.__allocated_size = max_size
 
-    def get_root(self):
+    def __getitem__(self, index):
         if self.__nodes_count == 0:
             raise IndexError("empty heap")
+        elif index >= self.__nodes_count or index < 0:
+            raise IndexError("index out of range")
         else:
-            return self.__arr[0]
+            return self.__arr[index]
+
+    def get_root(self):
+        return self[0]
 
     def __len__(self):
         return self.__nodes_count
