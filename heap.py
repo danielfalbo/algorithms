@@ -6,7 +6,8 @@ https://www.wikiwand.com/en/Heap_(data_structure)
 
 class Heap:
     """
-    Min-Heap (parent <= child)
+    key-value min-heap
+    (parent.value <= child.value)
     """
 
     def parent_idx(child_idx): return (child_idx - 1) // 2
@@ -18,20 +19,30 @@ class Heap:
             super().__init__("heap is already full")
 
     def __init__(self, max_size):
-        self.__arr = [None for _ in range(max_size)]
         self.__nodes_count = 0
         self.__allocated_size = max_size
 
-    def __getitem__(self, index):
+        # self.__arr[i] will be the (value, key) tuple of the ith element of the heap
+        self.__arr = [None for _ in range(max_size)]
+
+        # self.__position[i] will be the index of the item with key i in self.__arr
+        self.__position = [None for _ in range(max_size)]
+
+    def __getitem__(self, key: int):
         if self.__nodes_count == 0:
             raise IndexError("empty heap")
-        elif index >= self.__nodes_count or index < 0:
-            raise IndexError("index out of range")
+        elif self.__position[key] is None:
+            raise KeyError(key)
         else:
-            return self.__arr[index]
+            i = self.__position[key]
+            assert 0 <= i < self.__nodes_count
+            return self.__arr[i]
 
     def get_root(self):
-        return self[0]
+        if self.__nodes_count == 0:
+            raise IndexError("pop from empty heap")
+        else:
+            return self.__arr[0]
 
     def __len__(self):
         return self.__nodes_count
@@ -40,13 +51,18 @@ class Heap:
         return f"{self.__arr[:self.__nodes_count]}"
 
     def __swap(self, i, j):
+        _, ith_node_key = self.__arr[i]
+        _, jth_node_key = self.__arr[j]
         self.__arr[i], self.__arr[j] = self.__arr[j], self.__arr[i]
+        self.__position[ith_node_key], self.__position[jth_node_key] = j, i
 
-    def insert(self, value):
+    def insert(self, key, value):
         if self.__nodes_count == self.__allocated_size:
             raise Heap.FullHeapException
         else:
-            self.__arr[self.__nodes_count] = value
+            self.__arr[self.__nodes_count] = (value, key)
+            assert self.__position[key] is None
+            self.__position[key] = self.__nodes_count
             self.__heapify_up(self.__nodes_count)
             self.__nodes_count += 1
 
@@ -58,25 +74,21 @@ class Heap:
             self.__swap(child_idx, parent_idx)
             self.__heapify_up(parent_idx)
 
-    def pop(self, index=0):
+    def pop(self):
         if self.__nodes_count == 0:
             raise IndexError("pop from empty heap")
-        elif index >= self.__nodes_count or index < 0:
-            raise IndexError("pop index out of range")
         else:
-            value = self.__arr[index]
+            popped_node_value, popped_node_key = self.__arr[0]
 
             last_node_idx = self.__nodes_count - 1
-            self.__swap(index, last_node_idx)
+            self.__swap(0, last_node_idx)
+            self.__position[popped_node_key] = None
             self.__arr[last_node_idx] = None
             self.__nodes_count -= 1
 
-            # if child < parent
-            self.__heapify_up(index)
-            # else
-            self.__heapify_down(index)
+            self.__heapify_down(0)
 
-            return value
+            return (popped_node_value, popped_node_key)
 
     def __heapify_down(self, index):
         parent_idx = index
@@ -105,33 +117,38 @@ if __name__ == "__main__":
     h = Heap(max_size=10)
     assert len(h) == 0
 
-    h.insert(10)
+    key, value = 0, 10
+    h.insert(key=key, value=value)
     assert len(h) == 1
-    assert h.get_root() == 10
+    assert h.get_root() == (value, key)
 
-    h.insert(19)
+    key, value = 1, 19
+    h.insert(key=key, value=value)
     assert len(h) == 2
-    assert h.get_root() == 10
+    assert h.get_root() == (10, 0)
 
-    h.insert(1)
+    key, value = 2, 1
+    h.insert(key=key, value=value)
     assert len(h) == 3
-    assert h.get_root() == 1
+    assert h.get_root() == (value, key)
 
     print(h)
 
-    h.pop()
+    value, key = h.pop()
+    assert value == 1 and key == 2
     assert len(h) == 2
-    assert h.get_root() == 10
+    assert h.get_root() == (10, 0)
 
     h.pop()
     assert len(h) == 1
-    assert h.get_root() == 19
+    assert h.get_root() == (19, 1)
 
     h.pop()
     assert len(h) == 0
 
     try:
         h.get_root()
+        print(h.get_root())
         assert False is True
     except IndexError:
         pass

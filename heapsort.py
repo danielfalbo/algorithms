@@ -10,14 +10,14 @@ from heap import Heap
 def heapsorted(arr):
     n = len(arr)
 
-    h = Heap(n)
+    h = Heap(max_size=n)
 
     for i in range(n):
-        h.insert(arr[i])
+        h.insert(key=i, value=arr[i])
 
     result = [h.pop() for _ in range(n)]
 
-    return result
+    return [value for value, _ in result]
 
 
 if __name__ == "__main__":
