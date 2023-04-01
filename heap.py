@@ -65,12 +65,24 @@ class Heap:
             raise Heap.FullHeapException
         else:
             self.__arr[self.__nodes_count] = (value, key)
-            assert key not in self
-            self.__position[key] = self.__nodes_count
-            self.__heapify_up(self.__nodes_count)
-            self.__nodes_count += 1
+            if key not in self:
+                # insert
+                self.__position[key] = self.__nodes_count
+                self.__heapify_up(self.__nodes_count)
+                self.__nodes_count += 1
+            else:
+                # update and heapify
+                i = self.__position[key]
+                self.__arr[i] = (value, key)
+                self.__heapify_up(i)
+                self.__heapify_down(i)
 
     def insert(self, key, value):
+        assert key not in self
+        self[key] = value
+
+    def update(self, key, value):
+        assert key in self
         self[key] = value
 
     def __heapify_up(self, index):
