@@ -28,10 +28,13 @@ class Heap:
         # self.__position[i] will be the index of the item with key i in self.__arr
         self.__position = [None for _ in range(max_size)]
 
+    def __contains__(self, key):
+        return self.__position[key] is not None
+
     def __getitem__(self, key: int):
         if self.__nodes_count == 0:
             raise IndexError("empty heap")
-        elif self.__position[key] is None:
+        elif key not in self:
             raise KeyError(key)
         else:
             i = self.__position[key]
@@ -61,7 +64,7 @@ class Heap:
             raise Heap.FullHeapException
         else:
             self.__arr[self.__nodes_count] = (value, key)
-            assert self.__position[key] is None
+            assert key not in self
             self.__position[key] = self.__nodes_count
             self.__heapify_up(self.__nodes_count)
             self.__nodes_count += 1
