@@ -39,7 +39,8 @@ class Heap:
         else:
             i = self.__position[key]
             assert 0 <= i < self.__nodes_count
-            return self.__arr[i]
+            value, _ = self.__arr[i]
+            return value
 
     def get_root(self):
         if self.__nodes_count == 0:
