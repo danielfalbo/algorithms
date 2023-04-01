@@ -7,7 +7,7 @@ https://www.wikiwand.com/en/Heapsort
 from heap import Heap
 
 
-def heapsorted(arr):
+def heapsorted(arr, reverse=False):
     n = len(arr)
 
     h = Heap(max_size=n)
@@ -16,6 +16,9 @@ def heapsorted(arr):
         h.insert(key=i, value=arr[i])
 
     result = [h.pop() for _ in range(n)]
+
+    if reverse:
+        result.reverse()
 
     return [value for value, _ in result]
 
