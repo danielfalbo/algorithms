@@ -60,7 +60,7 @@ class Heap:
         self.__arr[i], self.__arr[j] = self.__arr[j], self.__arr[i]
         self.__position[ith_node_key], self.__position[jth_node_key] = j, i
 
-    def insert(self, key, value):
+    def __setitem__(self, key, value):
         if self.__nodes_count == self.__allocated_size:
             raise Heap.FullHeapException
         else:
@@ -69,6 +69,9 @@ class Heap:
             self.__position[key] = self.__nodes_count
             self.__heapify_up(self.__nodes_count)
             self.__nodes_count += 1
+
+    def insert(self, key, value):
+        self[key] = value
 
     def __heapify_up(self, index):
         child_idx, parent_idx = index, Heap.parent_idx(index)
@@ -122,7 +125,7 @@ if __name__ == "__main__":
     assert len(h) == 0
 
     key, value = 0, 10
-    h.insert(key=key, value=value)
+    h[key] = value
     assert len(h) == 1
     assert h.get_root() == (value, key)
 
@@ -132,7 +135,7 @@ if __name__ == "__main__":
     assert h.get_root() == (10, 0)
 
     key, value = 2, 1
-    h.insert(key=key, value=value)
+    h[key] = value
     assert len(h) == 3
     assert h.get_root() == (value, key)
 
