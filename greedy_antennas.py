@@ -16,6 +16,8 @@ of 10 KMs, what is the smallest number of antennas
 that have to be built?
 """
 
+from heapsort import heapsorted as sorted
+
 
 def antennas(houses, radius):
     """
@@ -33,7 +35,7 @@ def antennas(houses, radius):
     """
     locations = []
 
-    houses.sort(reverse=True)
+    houses = sorted(houses, reverse=True)
 
     while houses:
         # place antenna at first uncovered house location + radius
