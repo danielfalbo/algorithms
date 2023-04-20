@@ -47,8 +47,8 @@ def partition(tasks):
 
 
 def compatible(task1, task2):
-    s1, t1 = task1
-    s2, t2 = task2
+    s1, t1 = task1[0], task1[1]
+    s2, t2 = task2[0], task2[1]
 
     # one of the two tasks starts after the other ended
     return s2 > t1 or s1 > t2
