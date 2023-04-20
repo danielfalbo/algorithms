@@ -93,6 +93,7 @@ class WIS:
         if self.__optimal_schedule_set_mem is None:
             s = []
 
+            # O(n)
             i = len(self.__tasks) - 1
             while i is not None and i >= 0:
                 ith_task = self.__tasks[i]
