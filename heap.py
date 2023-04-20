@@ -6,7 +6,7 @@ https://www.wikiwand.com/en/Heap_(data_structure)
 
 class Heap:
     """
-    key-value min-heap
+    name-value min-heap
     (parent.value <= child.value)
     """
 
@@ -22,22 +22,22 @@ class Heap:
         self.__nodes_count = 0
         self.__allocated_size = max_size
 
-        # self.__arr[i] will be the (value, key) tuple of the ith element of the heap
+        # self.__arr[i] will be the (value, name) tuple of the ith element of the heap
         self.__arr = [None for _ in range(max_size)]
 
-        # self.__position[i] will be the index of the item with key i in self.__arr
+        # self.__position[i] will be the index of the item with name i in self.__arr
         self.__position = [None for _ in range(max_size)]
 
-    def __contains__(self, key):
-        return self.__position[key] is not None
+    def __contains__(self, name):
+        return self.__position[name] is not None
 
-    def __getitem__(self, key: int):
+    def __getitem__(self, name: int):
         if self.__nodes_count == 0:
             raise IndexError("empty heap")
-        elif key not in self:
-            raise KeyError(key)
+        elif name not in self:
+            raise KeyError(name)
         else:
-            i = self.__position[key]
+            i = self.__position[name]
             assert 0 <= i < self.__nodes_count
             value, _ = self.__arr[i]
             return value
@@ -55,35 +55,35 @@ class Heap:
         return f"{self.__arr[:self.__nodes_count]}"
 
     def __swap(self, i, j):
-        _, ith_node_key = self.__arr[i]
-        _, jth_node_key = self.__arr[j]
+        _, ith_node_name = self.__arr[i]
+        _, jth_node_name = self.__arr[j]
         self.__arr[i], self.__arr[j] = self.__arr[j], self.__arr[i]
-        self.__position[ith_node_key], self.__position[jth_node_key] = j, i
+        self.__position[ith_node_name], self.__position[jth_node_name] = j, i
 
-    def __setitem__(self, key, value):
+    def __setitem__(self, name, value):
         if self.__nodes_count == self.__allocated_size:
             raise Heap.FullHeapException
         else:
-            self.__arr[self.__nodes_count] = (value, key)
-            if key not in self:
+            self.__arr[self.__nodes_count] = (value, name)
+            if name not in self:
                 # insert
-                self.__position[key] = self.__nodes_count
+                self.__position[name] = self.__nodes_count
                 self.__heapify_up(self.__nodes_count)
                 self.__nodes_count += 1
             else:
                 # update and heapify
-                i = self.__position[key]
-                self.__arr[i] = (value, key)
+                i = self.__position[name]
+                self.__arr[i] = (value, name)
                 self.__heapify_up(i)
                 self.__heapify_down(i)
 
-    def insert(self, key, value):
-        assert key not in self
-        self[key] = value
+    def insert(self, name, value):
+        assert name not in self
+        self[name] = value
 
-    def update(self, key, value):
-        assert key in self
-        self[key] = value
+    def update(self, name, value):
+        assert name in self
+        self[name] = value
 
     def __heapify_up(self, index):
         child_idx, parent_idx = index, Heap.parent_idx(index)
@@ -97,17 +97,17 @@ class Heap:
         if self.__nodes_count == 0:
             raise IndexError("pop from empty heap")
         else:
-            popped_node_value, popped_node_key = self.__arr[0]
+            popped_node_value, popped_node_name = self.__arr[0]
 
             last_node_idx = self.__nodes_count - 1
             self.__swap(0, last_node_idx)
-            self.__position[popped_node_key] = None
+            self.__position[popped_node_name] = None
             self.__arr[last_node_idx] = None
             self.__nodes_count -= 1
 
             self.__heapify_down(0)
 
-            return (popped_node_value, popped_node_key)
+            return (popped_node_value, popped_node_name)
 
     def __heapify_down(self, index):
         parent_idx = index
@@ -136,25 +136,25 @@ if __name__ == "__main__":
     h = Heap(max_size=10)
     assert len(h) == 0
 
-    key, value = 0, 10
-    h[key] = value
+    name, value = 0, 10
+    h[name] = value
     assert len(h) == 1
-    assert h.get_root() == (value, key)
+    assert h.get_root() == (value, name)
 
-    key, value = 1, 19
-    h.insert(key=key, value=value)
+    name, value = 1, 19
+    h.insert(name=name, value=value)
     assert len(h) == 2
     assert h.get_root() == (10, 0)
 
-    key, value = 2, 1
-    h[key] = value
+    name, value = 2, 1
+    h[name] = value
     assert len(h) == 3
-    assert h.get_root() == (value, key)
+    assert h.get_root() == (value, name)
 
     print(h)
 
-    value, key = h.pop()
-    assert value == 1 and key == 2
+    value, name = h.pop()
+    assert value == 1 and name == 2
     assert len(h) == 2
     assert h.get_root() == (10, 0)
 

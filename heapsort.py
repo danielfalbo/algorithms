@@ -13,7 +13,7 @@ def heapsorted(arr, reverse=False):
     h = Heap(max_size=n)
 
     for i in range(n):
-        h.insert(key=i, value=arr[i])
+        h.insert(name=i, value=arr[i])
 
     result = [h.pop() for _ in range(n)]
 

@@ -26,7 +26,7 @@ def dijkstra(g, s: int):
     n = len(g)  # number of nodes in the graph
 
     heap = Heap(max_size=n)
-    heap.insert(key=s, value=0)
+    heap.insert(name=s, value=0)
 
     distances = [None for _ in range(n)]
     distances[s] = 0
@@ -43,7 +43,7 @@ def dijkstra(g, s: int):
                 # we haven't yet found a shortest path to u
                 dist = distances[closest_new_node_key] + edge_length
                 if neighbour_key not in heap:
-                    heap.insert(key=neighbour_key, value=dist)
+                    heap.insert(name=neighbour_key, value=dist)
                     heap[neighbour_key] = dist
                 else:
                     heap_neighbour_value = heap[neighbour_key]
