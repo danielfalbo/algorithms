@@ -6,8 +6,8 @@ https://www.wikiwand.com/en/Heap_(data_structure)
 
 class Heap:
     """
-    name-value min-heap
-    (parent.value <= child.value)
+    name-value min-heap:
+    key(parent.value) <= key(child.value)
     """
 
     def parent_idx(child_idx): return (child_idx - 1) // 2
@@ -18,9 +18,11 @@ class Heap:
         def __init__(self):
             super().__init__("heap is already full")
 
-    def __init__(self, max_size):
+    def __init__(self, max_size, key=lambda item: item):
         self.__nodes_count = 0
         self.__allocated_size = max_size
+
+        self.__key = key
 
         # self.__arr[i] will be the (value, name) tuple of the ith element of the heap
         self.__arr = [None for _ in range(max_size)]
@@ -89,7 +91,8 @@ class Heap:
         child_idx, parent_idx = index, Heap.parent_idx(index)
         child, parent = self.__arr[child_idx], self.__arr[parent_idx]
 
-        if child_idx > 0 and child < parent:
+        # remember node[0] is the node value and node[1] is the node name
+        if child_idx > 0 and self.__key(child[0]) < self.__key(parent[0]):
             self.__swap(child_idx, parent_idx)
             self.__heapify_up(parent_idx)
 
@@ -123,11 +126,16 @@ class Heap:
         else:
             # both right and left child
             left_child, right_child = self.__arr[left_child_idx], self.__arr[right_child_idx]
-            smaller_child_idx = left_child_idx if left_child < right_child else right_child_idx
+            # remember node[0] is the node value and node[1] is the node name
+            smaller_child_idx = (
+                left_child_idx if self.__key(left_child[0]) < self.__key(right_child[0])
+                else right_child_idx
+            )
 
         parent, smaller_child = self.__arr[parent_idx], self.__arr[smaller_child_idx]
 
-        if smaller_child < parent:
+        # remember node[0] is the node value and node[1] is the node name
+        if self.__key(smaller_child[0]) < self.__key(parent[0]):
             self.__swap(parent_idx, smaller_child_idx)
             self.__heapify_down(smaller_child_idx)
 
@@ -180,5 +188,16 @@ if __name__ == "__main__":
 
     assert str(h) == "[]"
     print(h)
+
+    ########################################################
+    h = Heap(max_size=10, key=lambda value: value[1])
+
+    name, value = 0, (16, 18)
+    h[name] = value
+
+    name, value = 1, (0, 14)
+    h[name] = value
+    assert len(h) == 2
+    assert h.get_root() == ((0, 14), 1)
 
     print("all tests successful")
