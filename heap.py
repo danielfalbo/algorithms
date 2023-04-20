@@ -3,6 +3,8 @@ Heap (data structure)
 https://www.wikiwand.com/en/Heap_(data_structure)
 """
 
+VALUE, NAME = 0, 1
+
 
 class Heap:
     """
@@ -29,7 +31,7 @@ class Heap:
         self.__position = [None for _ in range(max_size)]
 
         # key is only applied to value, not whole (value, name) pair
-        self.__key = lambda item: key(item[0])
+        self.__key = lambda item: key(item[VALUE])
 
     def __contains__(self, name):
         return self.__position[name] is not None

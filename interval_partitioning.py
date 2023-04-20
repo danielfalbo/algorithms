@@ -11,6 +11,9 @@ Also see Algorithm Design book by Jon Kleinberg and Éva Tardos
 from heapsort import heapsorted as sorted
 
 
+START, END = 0, 1
+
+
 def partition(tasks):
     """
     args:
@@ -26,13 +29,13 @@ def partition(tasks):
     resources = [None for _ in range(len(tasks))]
     next_resource = 1
 
-    tasks = sorted(tasks, key=lambda task: task[0])
+    tasks = sorted(tasks, key=lambda task: task[START])
 
     for j in range(len(tasks)):
         l = set(range(1, next_resource + 1))
 
         for i in range(j):
-            assert tasks[j][0] >= tasks[i][0]
+            assert tasks[j][START] >= tasks[i][START]
 
             if not compatible(tasks[i], tasks[j]):
                 l -= {resources[i]}
@@ -47,8 +50,8 @@ def partition(tasks):
 
 
 def compatible(task1, task2):
-    s1, t1 = task1[0], task1[1]
-    s2, t2 = task2[0], task2[1]
+    s1, t1 = task1[START], task1[END]
+    s2, t2 = task2[START], task2[END]
 
     # one of the two tasks starts after the other ended
     return s2 > t1 or s1 > t2
