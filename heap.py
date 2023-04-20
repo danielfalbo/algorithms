@@ -22,13 +22,14 @@ class Heap:
         self.__nodes_count = 0
         self.__allocated_size = max_size
 
-        self.__key = key
-
         # self.__arr[i] will be the (value, name) tuple of the ith element of the heap
         self.__arr = [None for _ in range(max_size)]
 
         # self.__position[i] will be the index of the item with name i in self.__arr
         self.__position = [None for _ in range(max_size)]
+
+        # key is only applied to value, not whole (value, name) pair
+        self.__key = lambda item: key(item[0])
 
     def __contains__(self, name):
         return self.__position[name] is not None
@@ -91,8 +92,7 @@ class Heap:
         child_idx, parent_idx = index, Heap.parent_idx(index)
         child, parent = self.__arr[child_idx], self.__arr[parent_idx]
 
-        # remember node[0] is the node value and node[1] is the node name
-        if child_idx > 0 and self.__key(child[0]) < self.__key(parent[0]):
+        if child_idx > 0 and self.__key(child) < self.__key(parent):
             self.__swap(child_idx, parent_idx)
             self.__heapify_up(parent_idx)
 
@@ -126,16 +126,14 @@ class Heap:
         else:
             # both right and left child
             left_child, right_child = self.__arr[left_child_idx], self.__arr[right_child_idx]
-            # remember node[0] is the node value and node[1] is the node name
             smaller_child_idx = (
-                left_child_idx if self.__key(left_child[0]) < self.__key(right_child[0])
+                left_child_idx if self.__key(left_child) < self.__key(right_child)
                 else right_child_idx
             )
 
         parent, smaller_child = self.__arr[parent_idx], self.__arr[smaller_child_idx]
 
-        # remember node[0] is the node value and node[1] is the node name
-        if self.__key(smaller_child[0]) < self.__key(parent[0]):
+        if self.__key(smaller_child) < self.__key(parent):
             self.__swap(parent_idx, smaller_child_idx)
             self.__heapify_down(smaller_child_idx)
 
