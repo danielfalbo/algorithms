@@ -9,6 +9,8 @@ Earliest Deadline First (EDF) scheduling
 https://en.wikipedia.org/wiki/Earliest_deadline_first_scheduling
 """
 
+from heapsort import heapsorted as sorted
+
 
 def edf(tasks):
     """
@@ -22,7 +24,7 @@ def edf(tasks):
     t = float("-inf")  # last finishing time
     s = set()  # result
 
-    tasks.sort(key=lambda task: task[1])
+    tasks = sorted(tasks, key=lambda task: task[1])
 
     for i in range(len(tasks)):
         if tasks[i][0] > t:
