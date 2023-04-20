@@ -8,6 +8,8 @@ what's the min number of resources needed to handle all requests?
 Also see Algorithm Design book by Jon Kleinberg and Éva Tardos
 """
 
+from heapsort import heapsorted as sorted
+
 
 def partition(tasks):
     """
@@ -16,15 +18,15 @@ def partition(tasks):
                 e.g. [(s0, f0), (s0, f0), (s1, f1)]
 
     returns:
+        tasks: reordered list of tasks
+
         resources: list such that
                     resources[i] == n means ith task is assigned to nth resource
-                    (tasks indices relative to list sorted by starting time increasingly,
-                    resources indices starting at 1)
     """
     resources = [None for _ in range(len(tasks))]
     next_resource = 1
 
-    tasks.sort(key=lambda task: task[0])
+    tasks = sorted(tasks, key=lambda task: task[0])
 
     for j in range(len(tasks)):
         l = set(range(1, next_resource + 1))
@@ -41,7 +43,7 @@ def partition(tasks):
         if resources[j] == next_resource:
             next_resource += 1
 
-    return resources
+    return tasks, resources
 
 
 def compatible(task1, task2):
@@ -88,7 +90,7 @@ if __name__ == "__main__":
         (0, 14), (16, 18),
         (0, 14),
     ]
-    l = partition(tasks)
+    tasks, l = partition(tasks)
     d = max(l)
     assert d == 3
     assert compatible_partitioning(tasks, l)
@@ -105,7 +107,7 @@ if __name__ == "__main__":
         (5, 12), (15, 17), (19, 25), (35, 38),
         (0, 40)
     ]
-    l = partition(tasks)
+    tasks, l = partition(tasks)
     d = max(l)
     assert d == 2
     assert compatible_partitioning(tasks, l)
@@ -122,7 +124,7 @@ if __name__ == "__main__":
         (0, 14), (16, 20),
         (10, 18)
     ]
-    l = partition(tasks)
+    tasks, l = partition(tasks)
     d = max(l)
     assert d == 2
     assert compatible_partitioning(tasks, l)
@@ -143,7 +145,7 @@ if __name__ == "__main__":
         (5, 25), (55, 70),
         (5, 25), (55, 70)
     ]
-    l = partition(tasks)
+    tasks, l = partition(tasks)
     d = max(l)
     assert d == 4
     assert compatible_partitioning(tasks, l)
