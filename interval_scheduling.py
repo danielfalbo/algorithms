@@ -12,6 +12,9 @@ https://en.wikipedia.org/wiki/Earliest_deadline_first_scheduling
 from heapsort import heapsorted as sorted
 
 
+START, END = 0, 1
+
+
 def edf(tasks):
     """
     arguments:
@@ -24,12 +27,12 @@ def edf(tasks):
     t = float("-inf")  # last finishing time
     s = set()  # result
 
-    tasks = sorted(tasks, key=lambda task: task[1])
+    tasks = sorted(tasks, key=lambda task: task[END])
 
     for i in range(len(tasks)):
-        if tasks[i][0] > t:
+        if tasks[i][START] > t:
             s.add(tasks[i])
-            t = tasks[i][1]
+            t = tasks[i][END]
 
     return s
 
