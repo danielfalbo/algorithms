@@ -3,8 +3,6 @@ Knapsack Problem but you're blind.
 
 You can't identify items and their values but only their size,
 so you only aim at filling the knapsack as much as you can.
-
-https://www.cs.cmu.edu/~ckingsf/bioinfo-lectures/subsetsum.pdf
 """
 
 
