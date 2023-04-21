@@ -41,8 +41,11 @@ class WIS:
 
         # TODO: do this in O(n)
         # O(n^2)
-        self.__lcidx_mem = {0: None}
-        for j in range(len(tasks)):
+        self.__lcidx_mem = {
+            0: None,
+            1: 0 if compatible(self.__tasks[0], self.__tasks[1]) else None
+        }
+        for j in range(2, len(tasks)):
             for i in reversed(range(j)):
                 if compatible(self.__tasks[i], self.__tasks[j]):
                     self.__lcidx_mem[j] = i
