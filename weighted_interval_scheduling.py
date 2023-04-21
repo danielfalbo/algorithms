@@ -39,7 +39,6 @@ class WIS:
 
         self.__tasks = sorted(tasks, key=lambda task: task[END])
 
-        # TODO: do this in O(n)
         # O(n log n)
         self.__lcidx_mem = {0: None}
         for j in range(1, len(tasks)):
