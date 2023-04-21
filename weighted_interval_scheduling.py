@@ -14,7 +14,7 @@ https://www.wikiwand.com/en/Dynamic_programming
 """
 
 from heapsort import heapsorted as sorted
-from bisect import bisect_right
+from binary_search import bisect_right
 
 
 START, END, WEIGHT = 0, 1, 2
