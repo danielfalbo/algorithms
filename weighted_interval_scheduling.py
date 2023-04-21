@@ -14,7 +14,7 @@ https://www.wikiwand.com/en/Dynamic_programming
 """
 
 from heapsort import heapsorted as sorted
-from interval_partitioning import compatible
+from bisect import bisect_right
 
 
 START, END, WEIGHT = 0, 1, 2
@@ -40,17 +40,16 @@ class WIS:
         self.__tasks = sorted(tasks, key=lambda task: task[END])
 
         # TODO: do this in O(n)
-        # O(n^2)
-        self.__lcidx_mem = {
-            0: None,
-            1: 0 if compatible(self.__tasks[0], self.__tasks[1]) else None
-        }
-        for j in range(2, len(tasks)):
-            for i in reversed(range(j)):
-                if compatible(self.__tasks[i], self.__tasks[j]):
-                    self.__lcidx_mem[j] = i
-                    break
-            if j not in self.__lcidx_mem:
+        # O(n log n)
+        self.__lcidx_mem = {0: None}
+        for j in range(1, len(tasks)):
+            self.__lcidx_mem[j] = bisect_right(
+                self.__tasks,
+                self.__tasks[j][START],
+                hi=j,
+                key=lambda task: task[END]
+            ) - 1
+            if self.__lcidx_mem[j] < 0:
                 self.__lcidx_mem[j] = None
 
         # O(n)
