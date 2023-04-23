@@ -65,7 +65,7 @@ if __name__ == "__main__":
     menu = [wine, beer, pizza, burger, fries, coke, apple, donut]
 
     order = knapsack(menu, calorie_budget)
-    assert sum(map(lambda item: item[SIZE], order)) == calorie_budget
+    assert sum(map(lambda item: item[SIZE], order)) <= calorie_budget
     assert sum(map(lambda item: item[VALUE], order)) == 359
 
     print("all tests successful")
