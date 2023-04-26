@@ -15,15 +15,18 @@ def knapsack(items, capacity):
     returns:
         s: subset of items that fits the knapsack with max value sum
     """
+    n = len(items)
+
     # mem[i][k] will be the best value we can get from
     # the first i items for a knapsack of capacity k
-    mem = [[None for _ in range(capacity + 1)] for _ in range(len(items) + 1)]
-    for i in range(len(items) + 1):
+    mem = [[None for _ in range(capacity + 1)] for _ in range(n + 1)]
+    for i in range(n + 1):
         mem[i][0] = 0
     for k in range(capacity + 1):
         mem[0][k] = 0
 
-    for i in range(1, len(items) + 1):
+    # O(n * capacity)
+    for i in range(1, n + 1):
         ith_item_val, ith_item_size = items[i - 1]
         for smaller_capacity in range(1, capacity + 1):
             if ith_item_size > smaller_capacity:
@@ -34,7 +37,7 @@ def knapsack(items, capacity):
                     mem[i-1][smaller_capacity]
                 )
 
-    i, k = len(items), capacity
+    i, k = n, capacity
     goal_value = mem[i][k]
     s = []
     while i > 0 and k > 0 and goal_value > 0:
