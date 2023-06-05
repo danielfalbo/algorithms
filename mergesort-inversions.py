@@ -1,3 +1,12 @@
+"""
+Merge sort
+https://www.wikiwand.com/en/Merge_sort
+
+Inversion (discrete mathematics)
+https://www.wikiwand.com/en/Inversion_(discrete_mathematics)
+"""
+
+
 def inversions(arr):
     _, result = sorted_inversions(arr)
     return result
