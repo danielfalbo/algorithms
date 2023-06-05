@@ -41,7 +41,6 @@ if __name__ == "__main__":
 
     for _ in range(RANDOM_TESTS_COUNT):
         rand_arr_len = randint(1, MAX_RANDOM_ARR_LEN)
-        rand_arr_len = 10
         domain = randint(1, MAX_DOMAIN_SIZE)
         v = [randint(0, domain - 1) for _ in range(rand_arr_len)]
         assert linearly_sorted(v, domain=domain) == sorted(v)
@@ -58,7 +57,7 @@ if __name__ == "__main__":
         [PASS, PASS, HONORS],
         [HONORS, PASS, PASS],
         [INSUFFICIENT, INSUFFICIENT, HONORS],
-        [INSUFFICIENT, INSUFFICIENT, INSUFFICIENT, INSUFFICIENT, INSUFFICIENT]
+        [INSUFFICIENT, INSUFFICIENT, INSUFFICIENT, INSUFFICIENT, INSUFFICIENT],
     ]:
         assert linearly_sorted(v) == sorted(v)
 
