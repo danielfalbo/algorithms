@@ -4,7 +4,7 @@ the second has value b, and the thirs has value c. In the country,
 a price w can be paid exactly if and only if there exist three non-negative
 integers i_a, i_b, and i_c such that w = i_a * a + i_b * b + i_c * c
 —that is, such that w equals the total value of i_a coins of value a,
-i_b coins of value b, and i_c coins of value c. The following is an
+i_b coins of value b, and i_c coins of value c. The following is an efficient
 algorithm that, given a, b, c, and a price w, returns True if w can be
 paid exactly, and False otherwise.
 """
