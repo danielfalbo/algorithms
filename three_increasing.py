@@ -1,4 +1,6 @@
 """
+Increasing Triplet Subsequence problem
+
 Let v be an array of n non-negative integers. We say that v is 3-increasing
 if there exist 3 indices 0 <= i < j < k <= n-1 such that v[i] < v[j] < v[k].
 The following is an efficient algorithm that returns True if v is 3-increasing,
