@@ -1,5 +1,6 @@
 """
 Maximum Product Cutting problem
+Integer Break problem
 
 Given a positive integer n, a "cutting" of n is a sequence of positive integers
 a1, a2, ..., ak that sum up to n, that is, such that \sum_{i = 1}^{k} a_i = n.
