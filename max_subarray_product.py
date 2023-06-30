@@ -19,7 +19,8 @@ def max_subarray_product(arr):
     """
     n = len(arr)
 
-    # m[i] will be the max subarray product containing arr[i]
+    # m[i] will be the max product of all possible subarrays containing arr[i] and,
+    # eventually, only contiguous elements to the left of it
     m = [None for _ in range(n)]
     m[0] = arr[0]
 
@@ -35,5 +36,6 @@ if __name__ == "__main__":
     assert max_subarray_product([1.5, 4.0, 2.0, 0.1]) == 12.0
     assert max_subarray_product([2.0, 0.1, 2.0]) == 2.0
     assert max_subarray_product([10.0, 0.5, 4.0]) == 20.0
+    assert max_subarray_product([4.0, 0.5, 10.0]) == 20.0
     assert max_subarray_product([0.2]) == 0.2
     print("all tests successful")
