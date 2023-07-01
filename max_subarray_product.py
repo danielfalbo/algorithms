@@ -19,7 +19,7 @@ def max_subarray_product(arr):
     """
     n = len(arr)
 
-    # m[i] will be the max product of all possible subarrays containing arr[i] and,
+    # m[i] will be the max subarray product containing arr[i] and,
     # eventually, only contiguous elements to the left of it
     m = [None for _ in range(n)]
     m[0] = arr[0]
