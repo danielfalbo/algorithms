@@ -18,7 +18,7 @@ def lcs(s, t):
     if n == 0 or m == 0:
         return mx
 
-    # m[i][j] will be the longest common substring containing s[i] and t[j]
+    # v[i][j] will be the longest common substring containing s[i] and t[j]
     # and, eventually, only contiguous elements to their left
     v = [[0 for _ in t] for _ in s]
 
