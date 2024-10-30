@@ -1,5 +1,5 @@
 """
-Longest common substring
+Longest common subsequence
 https://wikiwand.com/en/Longest_common_subsequence
 """
 
